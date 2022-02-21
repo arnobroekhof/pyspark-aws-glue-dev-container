@@ -29,4 +29,7 @@ RUN pip3 install pyspark==3.1.1 \
 COPY --from=builder /deps/target/lib/ /opt/spark-libs
 COPY spark-defaults.conf /opt/spark/conf/
 COPY log4j.properties /opt/spark/conf/
-RUN rm -f /opt/spark/jars/*guava*
+RUN rm -f /opt/spark/jars/*guava* \
+  && rm -rf /root/.cache \
+  && yum clean all \
+  && rm -rf /var/cache/yum
