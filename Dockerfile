@@ -1,11 +1,29 @@
 # syntax=docker/dockerfile:1
+
+FROM amazoncorretto:8u322-al2 as pip-builder
+
+ARG TARGETARCH
+
+RUN yum -y update \
+  && yum -y install python3-devel tar gzip git
+WORKDIR /deps
+
+RUN pip3 install setuptools \
+ && pip3 install wheel \
+ && git clone https://github.com/awslabs/aws-glue-libs.git awsglue
+
+WORKDIR /deps/awsglue
+ADD awsglue_setup.py setup.py
+RUN python3 setup.py bdist_wheel
+
+
 FROM maven:3.8.4-amazoncorretto-8 AS builder
 WORKDIR /deps
 ADD pom.xml .
 RUN mvn clean package
 
-FROM amazoncorretto:8u322-al2
 
+FROM amazoncorretto:8u322-al2
 ENV LANG=en_US.UTF-8
 ENV PYSPARK_PYTHON=python3
 ENV SPARK_HOME=/opt/spark
@@ -22,9 +40,12 @@ RUN curl -o /tmp/spark.tgz -L https://aws-glue-etl-artifacts.s3.amazonaws.com/gl
     && mkdir /opt/spark \
     && tar xf /tmp/spark.tgz --strip-components=1 -C /opt/spark
 
+COPY --from=pip-builder /deps/awsglue/dist/awsglue-3.0-py3-none-any.whl /tmp/
+
 RUN pip3 install pyspark==3.1.1 \
   && pip3 install boto3==1.21.2 \
-  && pip3 install botocore==1.24.2
+  && pip3 install botocore==1.24.2 \
+  && pip3 install /tmp/awsglue-3.0-py3-none-any.whl
 
 COPY --from=builder /deps/target/lib/ /opt/spark-libs
 COPY spark-defaults.conf /opt/spark/conf/
@@ -32,4 +53,5 @@ COPY log4j.properties /opt/spark/conf/
 RUN rm -f /opt/spark/jars/*guava* \
   && rm -rf /root/.cache \
   && yum clean all \
-  && rm -rf /var/cache/yum
+  && rm -rf /var/cache/yum \
+  && rm -rf /tmp/*
