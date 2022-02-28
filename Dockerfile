@@ -34,7 +34,7 @@ ENV HADOOP_CONF_DIR=/opt/spark/conf
 ARG TARGETARCH
 
 RUN yum -y update \
-  && yum -y install python3-devel tar gzip
+  && yum -y install python3-devel tar gzip MySQL-python
 
 RUN curl -o /tmp/spark.tgz -L https://aws-glue-etl-artifacts.s3.amazonaws.com/glue-3.0/spark-3.1.1-amzn-0-bin-3.2.1-amzn-3.tgz \
     && mkdir /opt/spark \
@@ -46,7 +46,6 @@ RUN pip3 install pyspark==3.1.1 \
   && pip3 install boto3==1.21.2 \
   && pip3 install botocore==1.24.2 \
   && pip3 install PyMySQL==0.9.3 \
-  && pip3 install mysqlclient==2.1.0 \
   && pip3 install /tmp/awsglue-3.0-py3-none-any.whl
 
 COPY --from=builder /deps/target/lib/ /opt/spark-libs
