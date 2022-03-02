@@ -57,3 +57,5 @@ RUN rm -f /opt/spark/jars/*guava* \
   && yum clean all \
   && rm -rf /var/cache/yum \
   && rm -rf /tmp/*
+
+EXPOSE 4040
