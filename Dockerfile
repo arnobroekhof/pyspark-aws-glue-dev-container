@@ -46,6 +46,8 @@ RUN pip3 install pyspark==3.1.1 \
   && pip3 install boto3==1.21.2 \
   && pip3 install botocore==1.24.2 \
   && pip3 install PyMySQL==0.9.3 \
+  && pip3 install pytz==2019.3 \
+  && pip3 install requests==2.23.0 \
   && pip3 install /tmp/awsglue-3.0-py3-none-any.whl \
   && pip3 install mysqlclient==2.1.0
 
