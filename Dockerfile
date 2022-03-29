@@ -50,7 +50,8 @@ RUN pip3 install pyspark==3.1.1 \
   && pip3 install requests==2.23.0 \
   && pip3 install urllib3==1.25.8 \
   && pip3 install /tmp/awsglue-3.0-py3-none-any.whl \
-  && pip3 install mysqlclient==2.1.0
+  && pip3 install mysqlclient==2.1.0 \
+  && pip3 install pytest==7.1.1
 
 COPY --from=builder /deps/target/lib/ /opt/spark-libs
 COPY spark-defaults.conf /opt/spark/conf/
