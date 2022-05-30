@@ -61,6 +61,9 @@ RUN rm -f /opt/spark/jars/*guava* \
   && rm -rf /root/.cache \
   && yum clean all \
   && rm -rf /var/cache/yum \
-  && rm -rf /tmp/*
+  && rm -rf /tmp/* \
+  && ln -s /usr/local/bin/python3 /usr/local/bin/python \
+  && ln -s /usr/local/bin/pip3 /usr/local/bin/pip
+
 
 EXPOSE 4040
