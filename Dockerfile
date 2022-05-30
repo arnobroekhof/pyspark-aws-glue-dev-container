@@ -34,7 +34,7 @@ ENV HADOOP_CONF_DIR=/opt/spark/conf
 ARG TARGETARCH
 
 RUN yum -y update \
-  && yum -y install python3-devel tar gzip gcc mariadb-devel mariadb-libs
+  && yum -y install python3-devel tar gzip gcc mariadb-devel mariadb-libs make
 
 RUN curl -o /tmp/spark.tgz -L https://aws-glue-etl-artifacts.s3.amazonaws.com/glue-3.0/spark-3.1.1-amzn-0-bin-3.2.1-amzn-3.tgz \
     && mkdir /opt/spark \
