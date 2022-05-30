@@ -62,8 +62,8 @@ RUN rm -f /opt/spark/jars/*guava* \
   && yum clean all \
   && rm -rf /var/cache/yum \
   && rm -rf /tmp/* \
-  && ln -s /usr/local/bin/python3 /usr/local/bin/python \
-  && ln -s /usr/local/bin/pip3 /usr/local/bin/pip
+  && update-alternatives --install /usr/bin/python python /usr/bin/python3.7 1 \
+  && update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
 
 
 EXPOSE 4040
